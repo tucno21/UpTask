@@ -17,7 +17,7 @@ class AuthModel extends Model
     /**
      * nombre de la columnas de la tabla
      */
-    protected static $allowedFields = ['name', 'email', 'password'];
+    protected static $allowedFields = ['nombre', 'email', 'password', 'token', 'estado'];
 
     /**
      * obtener los datos de la tabla en 'array' u 'object'
@@ -51,12 +51,4 @@ class AuthModel extends Model
      */
     protected static $createdField    = 'created_at';
     protected static $updatedField    = 'updated_at';
-
-    public static function consulta()
-    {
-        $query = "SELECT * FROM users";
-        $data = parent::queryMod($query);
-
-        return $data;
-    }
 }
