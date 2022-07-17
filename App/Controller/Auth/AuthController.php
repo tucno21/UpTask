@@ -17,6 +17,38 @@ class AuthController extends Controller
 
     public function login()
     {
+        $result = $this->request()->isPost();
+
+        if ($result) {
+            $data = $this->request()->getInput();
+
+
+            $valid = $this->validate($data, [
+                'email' => 'required|email|not_unique:AuthModel,email',
+                'password' => 'required|password_verify:AuthModel,email',
+            ]);
+
+            if ($valid !== true) {
+                return view('auth/login', [
+                    'err' =>  (object)$valid,
+                    'data' => (object)$data,
+                ]);
+            } else {
+                $user = AuthModel::select('id, email, nombre, estado')->where('email', $data['email'])->get();
+
+                if ($user->estado == 1) {
+                    $this->sessionSet('user', $user);
+                    return $this->redirect('dashboard');
+                }
+
+                $mensaje = ['email' => 'Aún no has autenticado tu cuenta, revisa tu correo o en la seccion de span'];
+                return view('auth/login', [
+                    'err' =>  (object)$mensaje,
+                    'data' => (object)$data,
+                ]);
+            }
+        }
+
         return view('auth/login');
     }
 

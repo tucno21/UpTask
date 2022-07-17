@@ -491,19 +491,22 @@ class Validation
 
     private static function validatePassword_verify(string $nameInput, string $rule, $params)
     {
-        $value = self::searchInput($nameInput);
+        $textInput = self::searchInput($nameInput);
 
-        if ($value !== '') {
+        if ($textInput !== '') {
             if (count($params) === 2) {
-                $colum = $params[1];
-                $model = $params[0];
+                $model = $params[0]; //modelo
+                $colum = $params[1]; //nombre de la columna a buscar
+
+                //traer el el email de la entrada de imput que envio
                 $email = self::searchInput($params[1]);
 
                 $class = "App\Model\\" . $model;
                 $instance = new $class();
                 $result = $instance->where($colum, $email)->get();
+
                 if (!empty($result)) {
-                    if (!password_verify($value, $result[0]->$nameInput)) {
+                    if (!password_verify($textInput, $result->$nameInput)) {
                         self::addError($nameInput, $rule);
                     }
                 }
