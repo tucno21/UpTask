@@ -137,7 +137,58 @@ class AuthController extends Controller
     //restablecer contraseña
     public function resetPassword()
     {
-        return view('auth/resetPassword');
+        $result = $this->request()->isGet();
+        if ($result) {
+            $data = $this->request()->getInput();
+
+            if (!$data['token']) {
+                return $this->redirect('/');
+            }
+
+            $user = AuthModel::where('token', $data['token'])->first();
+
+            if (empty($user)) {
+                $alert = 'Token no valido, revisa tu email, para reestableces contraseña';
+                return view('auth/resetPassword', [
+                    'alert' => $alert,
+                ]);
+            }
+
+            return view('auth/resetPassword', [
+                'user' => $user,
+            ]);
+        }
+
+        $result = $this->request()->isPost();
+        if ($result) {
+            $data = $this->request()->getInput();
+
+            $valid = $this->validate($data, [
+                'password' => 'required|min:5|max:12|matches:repassword',
+                'repassword' => 'required',
+            ]);
+
+            if ($valid !== true) {
+
+                return $this->view('auth/resetPassword', [
+                    'err' =>  (object)$valid,
+                    'data' => (object)$data,
+                ]);
+            } else {
+                $user = AuthModel::where('token', $data['token'])->first();
+
+                //la contraseña ya viene $data y el modelo se encarga de codificar
+                $data['token'] = '';
+                $data['estado'] = 1;
+
+                AuthModel::update($user->id, $data);
+
+                return $this->redirect('/');
+            }
+        }
+
+
+        return view('auth/resetPassword', []);
     }
 
     //confirmacion de cuenta mensage
