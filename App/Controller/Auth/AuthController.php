@@ -4,6 +4,7 @@ namespace App\Controller\Auth;
 
 use System\Controller;
 use App\Model\AuthModel;
+use App\Library\Email\Email;
 
 
 class AuthController extends Controller
@@ -45,6 +46,9 @@ class AuthController extends Controller
                 $data['estado'] = 0;
 
                 AuthModel::create($data);
+
+                $email = new Email($data['email'], $data['nombre'], $data['token']);
+                $email->send();
 
                 return $this->redirect('confirm-message');
             }
