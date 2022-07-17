@@ -83,6 +83,22 @@ class AuthController extends Controller
     //confirmacion de cuenta
     public function confirmAccount()
     {
-        return view('auth/confirmAccount', []);
+        $data = $this->request()->getInput();
+
+        $user = AuthModel::where('token', $data['token'])->first();
+
+        $alert = '';
+        if (empty($user)) {
+            $alert = 'token no valido';
+        } else {
+            $user->estado = '1';
+            $user->token = '';
+
+            AuthModel::update($user->id, $user);
+        }
+
+        return view('auth/confirmAccount', [
+            'alert' => $alert,
+        ]);
     }
 }
