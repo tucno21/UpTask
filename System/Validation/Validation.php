@@ -460,10 +460,8 @@ class Validation
                 $class = "App\Model\\" . $model;
                 $instance = new $class();
                 $result = $instance->where($colum, $value)->get();
-
-                if (!empty($result)) {
+                if (!is_string($result))
                     self::addError($nameInput, $rule);
-                }
             }
         }
     }
@@ -482,9 +480,8 @@ class Validation
                 $instance = new $class();
                 $result = $instance->where($colum, $value)->get();
 
-                if (empty($result)) {
+                if (!is_string($result))
                     self::addError($nameInput, $rule);
-                }
             }
         }
     }
@@ -502,7 +499,7 @@ class Validation
                 $class = "App\Model\\" . $model;
                 $instance = new $class();
                 $result = $instance->where($colum, $email)->get();
-                if (!empty($result)) {
+                if (!is_string($result)) {
                     if (!password_verify($value, $result[0]->$nameInput)) {
                         self::addError($nameInput, $rule);
                     }
