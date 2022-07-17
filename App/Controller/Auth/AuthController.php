@@ -97,7 +97,41 @@ class AuthController extends Controller
     //formulario olvide mi password
     public function forgotPassword()
     {
+        $result = $this->request()->isPost();
+
+        if ($result) {
+            $data = $this->request()->getInput();
+
+            $valid = $this->validate($data, [
+                'email' => 'required|email|not_unique:AuthModel,email',
+            ]);
+
+            if ($valid !== true) {
+                return view('auth/forgotPassword', [
+                    'err' =>  (object)$valid,
+                    'data' => (object)$data,
+                ]);
+            } else {
+                $user = AuthModel::select('id, email, nombre, estado')->where('email', $data['email'])->get();
+
+                $user->token = uniqid();
+                $user->estado = 0;
+
+                AuthModel::update($user->id, $user);
+
+                $email = new Email($user->email, $user->nombre, $user->token);
+                $email->send();
+
+                return $this->redirect('reset-message');
+            }
+        }
+
         return view('auth/forgotPassword');
+    }
+
+    public function resetMessage()
+    {
+        return view('auth/resetMessage');
     }
 
     //restablecer contraseña

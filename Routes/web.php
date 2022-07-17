@@ -27,6 +27,8 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 //mensaje de creacion de cuenta revisar su email
 Route::get('/confirm-message', [AuthController::class, 'confirmMessage']);
+//mensaje de creacion de cuenta revisar su email
+Route::get('/reset-message', [AuthController::class, 'resetMessage']);
 //mensaje de confirmacion de cuenta viene del email
 Route::get('/confirm-account', [AuthController::class, 'confirmAccount']);
 

@@ -4,13 +4,18 @@
 </div>
 
 <div class="container">
-    <form>
+    <form method="POST" action="<?= base_url('/forgot-password') ?>">
         <div class="row justify-content-md-center">
             <p class=" h5 mb-3 fw-normal text-center">Recupera tu acceso Uptask</p>
 
             <div class="col-lg-8 m-2 p-1 mx-auto form-floating">
-                <input type="email" class="form-control " id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <input type="email" name="email" class="form-control <?= isset($err->email) ? 'is-invalid' : '' ?>" id="floatingInput" placeholder="name@example.com" value="<?= isset($data->email) ? $data->email : '' ?>">
+                <label for="floatingInput">Email</label>
+                <?php if (isset($err->email)) : ?>
+                    <div class="invalid-feedback">
+                        <?= $err->email ?>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="col-lg-8 mx-auto text-center">
