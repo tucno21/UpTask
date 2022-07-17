@@ -15,15 +15,41 @@ class AuthController extends Controller
 
     public function login()
     {
+        return view('auth/login');
     }
 
     public function register()
     {
+        return view('auth/register');
     }
 
     public function logout()
     {
         $this->sessionDestroy('user');
         return $this->redirect('/');
+    }
+
+    //formulario olvide mi password
+    public function forgotPassword()
+    {
+        return view('auth/forgotPassword');
+    }
+
+    //restablecer contraseña
+    public function resetPassword()
+    {
+        return view('auth/resetPassword');
+    }
+
+    //confirmacion de cuenta mensage
+    public function confirmMessage()
+    {
+        return view('auth/confirmMessage');
+    }
+
+    //confirmacion de cuenta
+    public function confirmAccount()
+    {
+        return view('auth/confirmAccount', []);
     }
 }
