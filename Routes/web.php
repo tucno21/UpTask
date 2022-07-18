@@ -2,6 +2,7 @@
 
 use System\Route;
 use App\Controller\Auth\AuthController;
+use App\Controller\PanelAdmin\DashboardController;
 
 /**
  * coneccion con el archivo autoload de la aplicacion
@@ -32,6 +33,9 @@ Route::get('/reset-message', [AuthController::class, 'resetMessage']);
 //mensaje de confirmacion de cuenta viene del email
 Route::get('/confirm-account', [AuthController::class, 'confirmAccount']);
 
+
+//PANEL ADMINISTRADOR
+Route::get('/dashboard', [DashboardController::class, 'index']);
 /**
  * ejecuta la busqueda de rutas para los controladores
  */
